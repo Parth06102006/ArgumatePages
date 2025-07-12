@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DebateSphere - Test Results</title>
+    <style>
+      /* Global Styles */
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: "Inter", sans-serif;
+        overflow-x: hidden;
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 25%,
+          #f093fb 50%,
+          #f5576c 75%,
+          #4facfe 100%
+        );
+        background-size: 400% 400%;
+        animation: vibrantGradient 12s ease infinite;
+        color: #fff;
+        min-height: 100vh;
+        cursor: none;
+        position: relative;
+      }
+      
+      @keyframes vibrantGradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      /* Floating Particles */
+      .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+      
+      .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+      }
+      
+      .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+      .particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+      .particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+      .particle:nth-child(4) { left: 40%; animation-delay: 3s; }
+      .particle:nth-child(5) { left: 50%; animation-delay: 4s; }
+      .particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+      .particle:nth-child(7) { left: 70%; animation-delay: 0.5s; }
+      .particle:nth-child(8) { left: 80%; animation-delay: 1.5s; }
+      .particle:nth-child(9) { left: 90%; animation-delay: 2.5s; }
+      
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100px) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* Custom Cursor */
+      .custom-cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        background: radial-gradient(circle, #ff6b6b, #4ecdc4);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+      }
+      
+      .custom-cursor.active {
+        width: 30px;
+        height: 30px;
+        box-shadow: 0 0 30px rgba(255, 107, 107, 0.8);
+      }
+
+      /* Header */
+      .dashboard-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 20px 50px;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 50;
+        animation: slideDown 1s ease-out;
+      }
+      
+      @keyframes slideDown {
+        from {
+          transform: translateY(-100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      
+      .dashboard-header nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+      
+      .dashboard-header .logo a {
+        font-size: 2em;
+        font-weight: 800;
+        color: #fff;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      }
+      
+      .dashboard-header .logo a:hover {
+        transform: scale(1.1);
+        text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+      }
+      
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 30px;
+      }
+      
+      .nav-links a {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1em;
+        padding: 12px 24px;
+        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .nav-links a::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s ease;
+      }
+      
+      .nav-links a:hover::before {
+        left: 100%;
+      }
+      
+      .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Main Content */
+      .results-main {
+        padding-top: 120px;
+        min-height: 100vh;
+        position: relative;
+        z-index: 2;
+        padding-bottom: 50px;
+      }
+      
+      .results-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Hero Section */
+      .results-hero {
+        text-align: center;
+        margin-bottom: 60px;
+        animation: heroEntrance 1.5s ease-out;
+      }
+      
+      @keyframes heroEntrance {
+        from {
+          opacity: 0;
+          transform: translateY(50px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      
+      .results-hero h1 {
+        font-size: 4em;
+        font-weight: 800;
+        margin-bottom: 20px;
+        background: linear-gradient(45deg, #fff, #f093fb, #fff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        animation: titleGlow 3s ease-in-out infinite alternate;
+      }
+      
+      @keyframes titleGlow {
+        from {
+          filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+        }
+        to {
+          filter: drop-shadow(0 0 20px rgba(240, 147, 251, 0.6));
+        }
+      }
+      
+      .results-hero p {
+        font-size: 1.3em;
+        opacity: 0.9;
+        margin-bottom: 30px;
+      }
+
+      /* Loading State */
+      .loading-container {
+        text-align: center;
+        padding: 100px 20px;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      
+      .loading-spinner {
+        width: 80px;
+        height: 80px;
+        border: 6px solid rgba(255, 255, 255, 0.3);
+        border-top: 6px solid #fff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 30px;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .loading-text {
+        font-size: 1.5em;
+        font-weight: 600;
+        animation: loadingPulse 1.5s ease-in-out infinite;
+      }
+      
+      @keyframes loadingPulse {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+      }
+
+      /* Score Overview Cards */
+      .score-overview {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+        animation: cardsEntrance 1s ease-out 0.5s forwards;
+        opacity: 0;
+      }
+      
+      @keyframes cardsEntrance {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .overview-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 25px;
+        padding: 30px;
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+      }
+      
+      .overview-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transform: translateX(-100%) skewX(-15deg);
+        transition: transform 0.6s ease;
+      }
+      
+      .overview-card:hover::before {
+        transform: translateX(100%) skewX(-15deg);
+      }
+      
+      .overview-card:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        background: rgba(255, 255, 255, 0.2);
+      }
+      
+      .overview-card h3 {
+        font-size: 1.1em;
+        margin-bottom: 15px;
+        opacity: 0.8;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+      
+      .overview-card .value {
+        font-size: 1.3em;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      /* Detailed Scores Section */
+      .detailed-scores {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        padding: 50px;
+        margin-bottom: 60px;
+        animation: sectionSlideIn 1s ease-out 1s forwards;
+        opacity: 0;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      @keyframes sectionSlideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      .detailed-scores::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+        border-radius: 30px 30px 0 0;
+      }
+      
+      .detailed-scores h2 {
+        font-size: 2.5em;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 50px;
+        background: linear-gradient(45deg, #fff, #4ecdc4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      
+      .scores-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+      }
+      
+      .score-card {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 30px;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+      }
+      
+      .score-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      }
+      
+      .score-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      
+      .score-label {
+        font-size: 1.2em;
+        font-weight: 600;
+        color: #fff;
+      }
+      
+      .score-value {
+        font-size: 1.5em;
+        font-weight: 800;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      
+      .progress-container {
+        position: relative;
+        height: 12px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 15px;
+      }
+      
+      .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+        border-radius: 10px;
+        transition: width 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .progress-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        animation: shimmer 2s ease-in-out infinite;
+      }
+      
+      @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+      
+      .score-description {
+        font-size: 0.9em;
+        opacity: 0.8;
+        line-height: 1.4;
+      }
+
+      /* Total Score Section */
+      .total-score-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+        margin-bottom: 60px;
+        animation: totalScoreEntrance 1s ease-out 1.5s forwards;
+        opacity: 0;
+      }
+      
+      @keyframes totalScoreEntrance {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      
+      .total-card {
+        background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(78, 205, 196, 0.2));
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 25px;
+        padding: 40px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        cursor: pointer;
+      }
+      
+      .total-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: rotate 8s linear infinite;
+      }
+      
+      @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      
+      .total-card:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+      }
+      
+      .total-card h3 {
+        font-size: 1.3em;
+        margin-bottom: 20px;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+      }
+      
+      .total-card .score {
+        font-size: 4em;
+        font-weight: 800;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 1;
+        animation: scoreCount 2s ease-out;
+      }
+      
+      @keyframes scoreCount {
+        from { transform: scale(0); }
+        to { transform: scale(1); }
+      }
+      
+      .total-card .max-score {
+        font-size: 1.1em;
+        opacity: 0.7;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Performance Badge */
+      .performance-badge {
+        text-align: center;
+        margin-bottom: 60px;
+        animation: badgeEntrance 1s ease-out 2s forwards;
+        opacity: 0;
+      }
+      
+      @keyframes badgeEntrance {
+        from {
+          opacity: 0;
+          transform: translateY(30px) scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      
+      .badge {
+        display: inline-block;
+        padding: 20px 40px;
+        border-radius: 50px;
+        font-size: 1.5em;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      
+      .badge.excellent {
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+      }
+      
+      .badge.good {
+        background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+        box-shadow: 0 10px 30px rgba(78, 205, 196, 0.4);
+      }
+      
+      .badge.average {
+        background: linear-gradient(45deg, #feca57, #ff9ff3);
+        box-shadow: 0 10px 30px rgba(254, 202, 87, 0.4);
+      }
+      
+      .badge.needs-improvement {
+        background: linear-gradient(45deg, #ff7675, #fd79a8);
+        box-shadow: 0 10px 30px rgba(255, 118, 117, 0.4);
+      }
+      
+      .badge:hover {
+        transform: scale(1.1);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      /* AI Feedback Section */
+      .feedback-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        padding: 50px;
+        margin-bottom: 60px;
+        animation: feedbackSlideIn 1s ease-out 2.5s forwards;
+        opacity: 0;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      @keyframes feedbackSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .feedback-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #4ecdc4, #45b7d1, #96ceb4);
+        border-radius: 30px 30px 0 0;
+      }
+      
+      .feedback-section h2 {
+        font-size: 2.5em;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 40px;
+        background: linear-gradient(45deg, #fff, #4ecdc4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      
+      .feedback-card {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .feedback-card::before {
+        content: '"';
+        position: absolute;
+        top: 20px;
+        left: 30px;
+        font-size: 6em;
+        color: rgba(255, 255, 255, 0.2);
+        font-family: serif;
+      }
+      
+      .feedback-card blockquote {
+        font-size: 1.3em;
+        line-height: 1.6;
+        font-style: italic;
+        margin: 0;
+        padding-left: 60px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Action Buttons */
+      .action-buttons {
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: buttonsSlideIn 1s ease-out 3s forwards;
+        opacity: 0;
+      }
+      
+      @keyframes buttonsSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .cta-button {
+        padding: 18px 40px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-size: 1.2em;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+        border: none;
+        cursor: pointer;
+      }
+      
+      .cta-button.primary {
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        color: #fff;
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+      }
+      
+      .cta-button.secondary {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+      }
+      
+      .cta-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s ease;
+      }
+      
+      .cta-button:hover::before {
+        left: 100%;
+      }
+      
+      .cta-button:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Interactive Elements */
+      .interactive-element {
+        transition: all 0.3s ease;
+      }
+      
+      .interactive-element:hover {
+        transform: scale(1.02);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .dashboard-header {
+          padding: 15px 20px;
+        }
+        
+        .dashboard-header nav {
+          flex-direction: column;
+          gap: 20px;
+        }
+        
+        .nav-links {
+          gap: 15px;
+        }
+        
+        .results-main {
+          padding-top: 140px;
+        }
+        
+        .results-hero h1 {
+          font-size: 2.5em;
+        }
+        
+        .detailed-scores,
+        .feedback-section {
+          padding: 30px 20px;
+        }
+        
+        .scores-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .total-score-section {
+          grid-template-columns: 1fr;
+        }
+        
+        .action-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .cta-button {
+          width: 100%;
+          max-width: 300px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="custom-cursor"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+    
+    <header class="dashboard-header">
+      <nav>
+        <div class="logo">
+          <a href="index.html">ArguMate</a>
+        </div>
+        <ul class="nav-links">
+          <li><a href="learn.html">Learn</a></li>
+          <li><a href="topics.html">Practice</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="results-main">
+      <div class="results-container">
+        <!-- Hero Section -->
+        <div class="results-hero">
+          <h1>🎉 Test Results</h1>
+          <p>Your debate performance analysis is ready!</p>
+        </div>
+        
+        <!-- Loading State -->
+        <div id="loading-state" class="loading-container">
+          <div class="loading-spinner"></div>
+          <div class="loading-text">Analyzing your performance...</div>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-state" class="error-container" style="display: none; text-align: center; padding: 60px 20px;">
+          <h3 style="font-size: 2em; margin-bottom: 20px;">⚠️ Results Not Ready</h3>
+          <p style="font-size: 1.2em; margin-bottom: 30px;">Your debate scores are still being processed. Please try again in a few moments.</p>
+          <button class="cta-button primary" onclick="location.reload()">🔄 Retry</button>
+        </div>
+
+        <!-- Main Content -->
+        <div id="results-content" style="display: none;">
+          <!-- Score Overview -->
+          <div class="score-overview">
+            <div class="overview-card interactive-element">
+              <h3>📚 Topic</h3>
+              <div class="value" id="debate-topic">Loading...</div>
+            </div>
+            <div class="overview-card interactive-element">
+              <h3>👤 Role</h3>
+              <div class="value" id="debate-role">Loading...</div>
+            </div>
+            <div class="overview-card interactive-element">
+              <h3>🎯 Format</h3>
+              <div class="value" id="debate-format">Loading...</div>
+            </div>
+            <div class="overview-card interactive-element">
+              <h3>📊 Level</h3>
+              <div class="value" id="debate-level">Loading...</div>
+            </div>
+          </div>
+
+          <!-- Performance Badge -->
+          <div class="performance-badge">
+            <div id="performance-badge" class="badge excellent">🏆 Excellent Performance</div>
+          </div>
+
+          <!-- Total Scores -->
+          <div class="total-score-section">
+            <div class="total-card interactive-element">
+              <h3>🎯 Total Score</h3>
+              <div class="score" id="total-score">0</div>
+              <div class="max-score">out of 40 points</div>
+            </div>
+            <div class="total-card interactive-element">
+              <h3>⭐ Final Grade</h3>
+              <div class="score" id="normalized-score">0.0</div>
+              <div class="max-score">out of 10.0</div>
+            </div>
+          </div>
+
+          <!-- Detailed Scores -->
+          <div class="detailed-scores">
+            <h2>📈 Performance Breakdown</h2>
+            <div class="scores-grid">
+              <div class="score-card interactive-element">
+                <div class="score-header">
+                  <span class="score-label">💡 Argument Quality</span>
+                  <span class="score-value" id="argument-score">0/10</span>
+                </div>
+                <div class="progress-container">
+                  <div class="progress-bar" id="argument-progress" style="width: 0%"></div>
+                </div>
+                <div class="score-description">How well-structured and convincing your arguments were</div>
+              </div>
+              
+              <div class="score-card interactive-element">
+                <div class="score-header">
+                  <span class="score-label">⚔️ Rebuttal Strength</span>
+                  <span class="score-value" id="rebuttal-score">0/10</span>
+                </div>
+                <div class="progress-container">
+                  <div class="progress-bar" id="rebuttal-progress" style="width: 0%"></div>
+                </div>
+                <div class="score-description">Your ability to counter opposing arguments effectively</div>
+              </div>
+              
+              <div class="score-card interactive-element">
+                <div class="score-header">
+                  <span class="score-label">🤝 POI Engagement</span>
+                  <span class="score-value" id="poi-score">0/5</span>
+                </div>
+                <div class="progress-container">
+                  <div class="progress-bar" id="poi-progress" style="width: 0%"></div>
+                </div>
+                <div class="score-description">How well you handled Points of Information</div>
+              </div>
+              
+              <div class="score-card interactive-element">
+                <div class="score-header">
+                  <span class="score-label">🏗️ Structure & Flow</span>
+                  <span class="score-value" id="structure-score">0/5</span>
+                </div>
+                <div class="progress-container">
+                  <div class="progress-bar" id="structure-progress" style="width: 0%"></div>
+                </div>
+                <div class="score-description">Organization and logical flow of your speech</div>
+              </div>
+              
+              <div class="score-card interactive-element">
+                <div class="score-header">
+                  <span class="score-label">🗣️ Language & Fluency</span>
+                  <span class="score-value" id="language-score">0/5</span>
+                </div>
+                <div class="progress-container">
+                  <div class="progress-bar" id="language-progress" style="width: 0%"></div>
+                </div>
+                <div class="score-description">Clarity, vocabulary, and speaking fluency</div>
+              </div>
+              
+              <div class="score-card interactive-element">
+                <div class="score-header">
+                  <span class="score-label">🎭 Role Fulfillment</span>
+                  <span class="score-value" id="role-score">0/5</span>
+                </div>
+                <div class="progress-container">
+                  <div class="progress-bar" id="role-progress" style="width: 0%"></div>
+                </div>
+                <div class="score-description">How well you fulfilled your specific debate role</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Feedback -->
+          <div class="feedback-section">
+            <h2>🤖 AI Coach Feedback</h2>
+            <div class="feedback-card">
+              <blockquote id="ai-feedback">
+                Loading personalized feedback...
+              </blockquote>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <a href="topics.html" class="cta-button primary">🚀 Practice Again</a>
+            <a href="index.html" class="cta-button secondary">🏠 Back to Home</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Custom Cursor JavaScript
+      const customCursor = document.querySelector(".custom-cursor");
+      document.addEventListener("mousemove", (e) => {
+        customCursor.style.left = e.clientX + "px";
+        customCursor.style.top = e.clientY + "px";
+      });
+      document.addEventListener("mousedown", () =>
+        customCursor.classList.add("active")
+      );
+      document.addEventListener("mouseup", () =>
+        customCursor.classList.remove("active")
+      );
+
+      // Interactive hover effects
+      document.addEventListener('DOMContentLoaded', () => {
+        const interactiveElements = document.querySelectorAll('.interactive-element');
+        
+        interactiveElements.forEach(element => {
+          element.addEventListener('mouseenter', () => {
+            element.style.transform = 'scale(1.02) translateY(-5px)';
+            element.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.2)';
+          });
+          
+          element.addEventListener('mouseleave', () => {
+            element.style.transform = 'scale(1) translateY(0)';
+            element.style.boxShadow = 'none';
+          });
+        });
+      });
+
+      // Results Logic
+      document.addEventListener('DOMContentLoaded', async () => {
+        const loadingState = document.getElementById('loading-state');
+        const errorState = document.getElementById('error-state');
+        const resultsContent = document.getElementById('results-content');
+
+        try {
+          // Get debate logs from localStorage
+          const debateLogs = localStorage.getItem('debateLogs');
+          
+          if (!debateLogs) {
+            throw new Error('No debate session found');
+          }
+
+          const debateData = JSON.parse(debateLogs);
+          const debateId = debateData.debateId;
+
+          if (!debateId) {
+            throw new Error('No debate ID found');
+          }
+
+          // Fetch score data from API
+          const response = await fetch(
+            `https://argumate.onrender.com/api/v1/totalScore/${debateId}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-type": "application/json",
+              },
+              credentials: "include",
+            }
+          );
+
+          const result = await response.json();
+          console.log('Score response:', result);
+
+          if (!result.success || !result.data || !result.data.score) {
+            throw new Error('Score data not available');
+          }
+
+          // Hide loading and show content
+          loadingState.style.display = 'none';
+          resultsContent.style.display = 'block';
+
+          // Populate debate information
+          document.getElementById('debate-topic').textContent = debateData.topic || 'N/A';
+          document.getElementById('debate-role').textContent = debateData.role || 'N/A';
+          document.getElementById('debate-format').textContent = debateData.format || 'N/A';
+          document.getElementById('debate-level').textContent = debateData.level || 'N/A';
+
+          // Populate scores with staggered animations
+          const scoreData = result.data.score;
+          
+          setTimeout(() => animateScore('argument', scoreData.argumentQuality || 0, 10), 1000);
+          setTimeout(() => animateScore('rebuttal', scoreData.rebuttalStrength || 0, 10), 1200);
+          setTimeout(() => animateScore('poi', scoreData.engagementWithPOIs || 0, 5), 1400);
+          setTimeout(() => animateScore('structure', scoreData.structureAndCohesion || 0, 5), 1600);
+          setTimeout(() => animateScore('language', scoreData.languageAndFluency || 0, 5), 1800);
+          setTimeout(() => animateScore('role', scoreData.roleFulfillment || 0, 5), 2000);
+
+          // Calculate and animate total scores
+          const totalScore = (scoreData.argumentQuality || 0) + 
+                           (scoreData.rebuttalStrength || 0) + 
+                           (scoreData.engagementWithPOIs || 0) + 
+                           (scoreData.structureAndCohesion || 0) + 
+                           (scoreData.languageAndFluency || 0) + 
+                           (scoreData.roleFulfillment || 0);
+
+          const normalizedScore = (totalScore / 40 * 10).toFixed(1);
+
+          setTimeout(() => {
+            animateNumber('total-score', totalScore);
+            animateNumber('normalized-score', normalizedScore);
+            updatePerformanceBadge(normalizedScore);
+          }, 2200);
+
+          // Display AI feedback
+          document.getElementById('ai-feedback').textContent = 
+            scoreData.feedback || 'Outstanding performance! Your debate skills are impressive. Keep practicing to reach even greater heights in your argumentation abilities.';
+
+        } catch (error) {
+          console.error('Error fetching scores:', error);
+          loadingState.style.display = 'none';
+          errorState.style.display = 'block';
+        }
+      });
+
+      // Animation functions
+      function animateScore(prefix, score, maxScore) {
+        const scoreElement = document.getElementById(`${prefix}-score`);
+        const progressElement = document.getElementById(`${prefix}-progress`);
+        
+        // Animate score number
+        animateNumber(`${prefix}-score`, `${score}/${maxScore}`);
+        
+        // Animate progress bar
+        const percentage = (score / maxScore) * 100;
+        setTimeout(() => {
+          progressElement.style.width = `${percentage}%`;
+        }, 100);
+      }
+
+      function animateNumber(elementId, targetValue) {
+        const element = document.getElementById(elementId);
+        const isDecimal = targetValue.toString().includes('.');
+        const target = parseFloat(targetValue.toString().replace(/\/\d+/, ''));
+        const suffix = targetValue.toString().includes('/') ? targetValue.toString().match(/\/\d+/)[0] : '';
+        
+        let current = 0;
+        const increment = target / 50; // 50 frames for smooth animation
+        
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+          }
+          
+          if (isDecimal && !suffix) {
+            element.textContent = current.toFixed(1);
+          } else if (suffix) {
+            element.textContent = Math.round(current) + suffix;
+          } else {
+            element.textContent = Math.round(current);
+          }
+        }, 20); // Smooth 50fps animation
+      }
+
+      function updatePerformanceBadge(score) {
+        const badge = document.getElementById('performance-badge');
+        const numScore = parseFloat(score);
+        
+        if (numScore >= 8.5) {
+          badge.className = 'badge excellent';
+          badge.textContent = '🏆 Excellent Performance';
+        } else if (numScore >= 7.0) {
+          badge.className = 'badge good';
+          badge.textContent = '🌟 Good Performance';
+        } else if (numScore >= 5.0) {
+          badge.className = 'badge average';
+          badge.textContent = '📈 Average Performance';
+        } else {
+          badge.className = 'badge needs-improvement';
+          badge.textContent = '💪 Room for Improvement';
+        }
+      }
+
+      // Add click sound effect simulation
+      document.addEventListener('click', () => {
+        // Visual feedback for clicks
+        const cursor = document.querySelector('.custom-cursor');
+        cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+        setTimeout(() => {
+          cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 150);
+      });
+      
+    </script>
+  </body>
+</html>
