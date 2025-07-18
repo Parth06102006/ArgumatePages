@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DebateSphere - Email Verification</title>
+    <style>
+      /* Global Styles */
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap");
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        background: linear-gradient(
+          135deg,
+          #c7ceea,
+          #ffd1dc,
+          #fff3cd,
+          #d5f5e3
+        ); /* Pastel gradient colors */
+        background-size: 400% 400%;
+        animation: pastel-gradient-animation 15s ease infinite;
+        color: #333;
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        cursor: none; /* Hide default cursor */
+        position: relative;
+      }
+      
+      @keyframes pastel-gradient-animation {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Floating Background Elements */
+      .floating-elements {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+      }
+      
+      .floating-shape {
+        position: absolute;
+        opacity: 0.1;
+        animation: float 6s ease-in-out infinite;
+        border-radius: 50%;
+      }
+      
+      .floating-shape:nth-child(1) {
+        top: 10%;
+        left: 10%;
+        width: 80px;
+        height: 80px;
+        background: #6a5acd;
+        animation-delay: 0s;
+        animation-duration: 8s;
+      }
+      
+      .floating-shape:nth-child(2) {
+        top: 20%;
+        right: 15%;
+        width: 60px;
+        height: 60px;
+        background: #a3d8f4;
+        animation-delay: 2s;
+        animation-duration: 10s;
+      }
+      
+      .floating-shape:nth-child(3) {
+        bottom: 30%;
+        left: 20%;
+        width: 100px;
+        height: 100px;
+        background: #ffb3d9;
+        animation-delay: 4s;
+        animation-duration: 7s;
+      }
+      
+      .floating-shape:nth-child(4) {
+        bottom: 20%;
+        right: 10%;
+        width: 70px;
+        height: 70px;
+        background: #d5f5e3;
+        animation-delay: 1s;
+        animation-duration: 9s;
+      }
+      
+      .floating-shape:nth-child(5) {
+        top: 50%;
+        left: 5%;
+        width: 90px;
+        height: 90px;
+        background: #c7ceea;
+        animation-delay: 3s;
+        animation-duration: 11s;
+      }
+      
+      .floating-shape:nth-child(6) {
+        top: 60%;
+        right: 25%;
+        width: 50px;
+        height: 50px;
+        background: #fff3cd;
+        animation-delay: 5s;
+        animation-duration: 6s;
+      }
+      
+      .floating-shape:nth-child(7) {
+        top: 30%;
+        left: 50%;
+        width: 40px;
+        height: 40px;
+        background: #8a2be2;
+        animation-delay: 1.5s;
+        animation-duration: 12s;
+      }
+      
+      .floating-shape:nth-child(8) {
+        bottom: 40%;
+        left: 60%;
+        width: 65px;
+        height: 65px;
+        background: #ff8eb8;
+        animation-delay: 3.5s;
+        animation-duration: 8.5s;
+      }
+      
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0px) rotate(0deg) scale(1);
+        }
+        25% {
+          transform: translateY(-20px) rotate(90deg) scale(1.1);
+        }
+        50% {
+          transform: translateY(-40px) rotate(180deg) scale(0.9);
+        }
+        75% {
+          transform: translateY(-20px) rotate(270deg) scale(1.05);
+        }
+      }
+
+      /* Custom Cursor Styles */
+      .custom-cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 10px;
+        height: 10px;
+        background-color: #000;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: width 0.2s ease-out, height 0.2s ease-out,
+          background-color 0.2s ease-out;
+      }
+      
+      .custom-cursor.active {
+        background-color: #555;
+        width: 20px;
+        height: 20px;
+      }
+
+      /* Header */
+      .dashboard-header {
+        background-color: rgba(255, 255, 255, 0.7);
+        padding: 15px 50px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        backdrop-filter: blur(8px);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 50;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        animation: slideDown 0.8s ease-out;
+      }
+      
+      @keyframes slideDown {
+        from {
+          transform: translateY(-100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      
+      .dashboard-header nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      
+      .dashboard-header .logo a {
+        font-size: 1.8em;
+        font-weight: 700;
+        color: #6a5acd;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+      }
+      
+      .dashboard-header .logo a:hover {
+        color: #8a2be2;
+        transform: scale(1.05);
+      }
+      
+      .nav-links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+      }
+      
+      .nav-links li {
+        margin-left: 30px;
+        animation: fadeInRight 0.8s ease-out forwards;
+        opacity: 0;
+      }
+      
+      .nav-links li:nth-child(1) { animation-delay: 0.2s; }
+      .nav-links li:nth-child(2) { animation-delay: 0.4s; }
+      
+      @keyframes fadeInRight {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      .nav-links a {
+        text-decoration: none;
+        color: #555;
+        font-weight: 600;
+        font-size: 1.1em;
+        padding: 8px 15px;
+        border-radius: 10px;
+        transition: background-color 0.3s ease, color 0.3s ease,
+          transform 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .nav-links a::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(186, 130, 255, 0.2), transparent);
+        transition: left 0.5s;
+      }
+      
+      .nav-links a:hover::before {
+        left: 100%;
+      }
+      
+      .nav-links a:hover,
+      .nav-links a.active {
+        background-color: rgba(186, 130, 255, 0.2);
+        color: #6a5acd;
+        transform: translateY(-3px);
+      }
+
+      /* OTP Page Specific Styles */
+      .otp-main {
+        padding-top: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 100px);
+        padding-bottom: 50px;
+        position: relative;
+        z-index: 2;
+      }
+      
+      .otp-container {
+        background-color: rgba(255, 255, 255, 0.85);
+        border-radius: 25px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        padding: 50px 40px;
+        margin: 20px;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        animation: heroEntrance 1.2s ease-out forwards;
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(15px);
+      }
+      
+      .otp-container::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(163, 216, 244, 0.1), transparent);
+        animation: shimmer 3s ease-in-out infinite;
+      }
+      
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%) translateY(-100%) rotate(45deg);
+        }
+        50% {
+          transform: translateX(100%) translateY(100%) rotate(45deg);
+        }
+        100% {
+          transform: translateX(-100%) translateY(-100%) rotate(45deg);
+        }
+      }
+      
+      @keyframes heroEntrance {
+        from {
+          opacity: 0;
+          transform: translateY(50px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      
+      .otp-container h1 {
+        font-size: 2.5em;
+        color: #5c4b51;
+        margin-bottom: 15px;
+        position: relative;
+        padding-bottom: 15px;
+        animation: titleGlow 2s ease-in-out infinite alternate;
+      }
+      
+      @keyframes titleGlow {
+        from {
+          text-shadow: 0 0 5px rgba(106, 90, 205, 0.3);
+        }
+        to {
+          text-shadow: 0 0 20px rgba(106, 90, 205, 0.6), 0 0 30px rgba(106, 90, 205, 0.4);
+        }
+      }
+      
+      .otp-container h1::after {
+        content: "";
+        width: 120px;
+        height: 5px;
+        background: linear-gradient(90deg, #a3d8f4, #ffb3d9, #a3d8f4);
+        background-size: 200% 100%;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 2px;
+        animation: gradientSlide 2s ease-in-out infinite;
+      }
+      
+      @keyframes gradientSlide {
+        0%, 100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+      
+      .otp-subtitle {
+        font-size: 1.1em;
+        color: #666;
+        margin-bottom: 30px;
+        line-height: 1.5;
+        animation: fadeInUp 1s ease-out 0.3s forwards;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      /* Error State */
+      .error-state {
+        display: none;
+        text-align: center;
+        padding: 40px 20px;
+        animation: fadeInUp 1s ease-out 0.6s forwards;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      
+      .error-state.active {
+        display: block;
+      }
+      
+      .error-state h3 {
+        font-size: 1.8em;
+        color: #e74c3c;
+        margin-bottom: 15px;
+      }
+      
+      .error-state p {
+        font-size: 1.1em;
+        color: #666;
+        margin-bottom: 25px;
+        line-height: 1.5;
+      }
+
+      /* OTP Section */
+      .otp-section {
+        display: none;
+      }
+      
+      .otp-section.active {
+        display: block;
+        animation: slideInFromRight 0.5s ease-out;
+      }
+      
+      @keyframes slideInFromRight {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      .otp-sent-message {
+        background: linear-gradient(135deg, rgba(163, 216, 244, 0.2), rgba(255, 179, 217, 0.2));
+        padding: 25px;
+        border-radius: 15px;
+        border: 2px solid rgba(106, 90, 205, 0.3);
+        margin-bottom: 30px;
+        font-size: 1.1em;
+        color: #5c4b51;
+        line-height: 1.5;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 1s ease-out 0.6s forwards;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      
+      .otp-sent-message::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: left 0.6s ease;
+      }
+      
+      .otp-sent-message:hover::before {
+        left: 100%;
+      }
+      
+      .otp-sent-message .email-highlight {
+        font-weight: 600;
+        color: #6a5acd;
+        word-break: break-all;
+        background: linear-gradient(45deg, #6a5acd, #8a2be2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      
+      .paste-instruction {
+        background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 193, 7, 0.08));
+        border: 2px solid rgba(255, 193, 7, 0.3);
+        color: #856404;
+        padding: 18px 25px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        font-size: 1em;
+        font-weight: 500;
+        animation: pulseGlow 2s infinite;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .paste-instruction::before {
+        content: '💡';
+        font-size: 1.2em;
+        margin-right: 8px;
+        animation: bounce 2s infinite;
+      }
+      
+      @keyframes pulseGlow {
+        0%, 100% {
+          transform: scale(1);
+          box-shadow: 0 0 0 rgba(255, 193, 7, 0.4);
+        }
+        50% {
+          transform: scale(1.02);
+          box-shadow: 0 0 20px rgba(255, 193, 7, 0.6);
+        }
+      }
+      
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-5px);
+        }
+        60% {
+          transform: translateY(-3px);
+        }
+      }
+      
+      .otp-inputs {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 30px;
+        animation: fadeInUp 1s ease-out 0.9s forwards;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .otp-digit {
+        width: 65px;
+        height: 65px;
+        border: 3px solid rgba(186, 130, 255, 0.2);
+        border-radius: 15px;
+        font-size: 1.6em;
+        font-weight: 700;
+        text-align: center;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+        color: #5c4b51;
+        outline: none;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        font-family: 'Inter', sans-serif;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      
+      .otp-digit::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent, rgba(163, 216, 244, 0.3), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      
+      .otp-digit:focus {
+        border-color: #a3d8f4;
+        box-shadow: 0 0 25px rgba(163, 216, 244, 0.6), 0 8px 25px rgba(0, 0, 0, 0.15);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.9));
+        transform: scale(1.1) translateY(-5px);
+      }
+      
+      .otp-digit:focus::before {
+        opacity: 1;
+      }
+      
+      .otp-digit.filled {
+        border-color: #6a5acd;
+        background: linear-gradient(135deg, rgba(106, 90, 205, 0.15), rgba(106, 90, 205, 0.08));
+        animation: fillBounce 0.5s ease-out;
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(106, 90, 205, 0.3);
+      }
+      
+      @keyframes fillBounce {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.15) rotate(5deg);
+        }
+        100% {
+          transform: scale(1.05);
+        }
+      }
+      
+      .otp-digit.auto-filled {
+        border-color: #4caf50;
+        background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.1));
+        animation: autoFillGlow 0.8s ease-out;
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(76, 175, 80, 0.6), 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+      
+      @keyframes autoFillGlow {
+        0% {
+          box-shadow: 0 0 0 rgba(76, 175, 80, 0.4);
+          transform: scale(1);
+        }
+        50% {
+          box-shadow: 0 0 40px rgba(76, 175, 80, 0.8);
+          transform: scale(1.2) rotate(10deg);
+        }
+        100% {
+          box-shadow: 0 0 30px rgba(76, 175, 80, 0.6);
+          transform: scale(1.05);
+        }
+      }
+      
+      .otp-digit:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Timer Section */
+      .timer-section {
+        margin-bottom: 25px;
+        font-size: 1.1em;
+        color: #666;
+        animation: fadeInUp 1s ease-out 1.2s forwards;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      
+      .timer {
+        font-weight: 700;
+        color: #6a5acd;
+        font-size: 1.2em;
+        background: linear-gradient(45deg, #6a5acd, #8a2be2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: timerPulse 1s infinite;
+      }
+      
+      @keyframes timerPulse {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+      
+      .timer.expired {
+        color: #e74c3c;
+        animation: blink 1s infinite;
+        background: none;
+        -webkit-text-fill-color: #e74c3c;
+      }
+      
+      @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0.3; }
+      }
+
+      /* Resend Section */
+      .resend-section {
+        margin-bottom: 30px;
+        animation: fadeInUp 1s ease-out 1.5s forwards;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      
+      .resend-btn {
+        background: linear-gradient(135deg, rgba(106, 90, 205, 0.1), rgba(106, 90, 205, 0.05));
+        border: 2px solid rgba(106, 90, 205, 0.3);
+        color: #6a5acd;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        padding: 12px 25px;
+        border-radius: 15px;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .resend-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(106, 90, 205, 0.2), transparent);
+        transition: left 0.5s ease;
+      }
+      
+      .resend-btn:hover::before {
+        left: 100%;
+      }
+      
+      .resend-btn:hover {
+        color: #8a2be2;
+        transform: translateY(-3px) scale(1.05);
+        background: linear-gradient(135deg, rgba(106, 90, 205, 0.2), rgba(106, 90, 205, 0.1));
+        box-shadow: 0 8px 20px rgba(106, 90, 205, 0.3);
+        border-color: #6a5acd;
+      }
+      
+      .resend-btn:disabled {
+        color: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        background: rgba(0, 0, 0, 0.05);
+        border-color: #ddd;
+        box-shadow: none;
+      }
+      
+      .resend-btn:disabled::before {
+        display: none;
+      }
+
+      /* Action Buttons */
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: fadeInUp 1s ease-out 1.8s forwards;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      
+      .cta-button {
+        display: inline-block;
+        background: linear-gradient(45deg, #ffb3d9, #ff8eb8);
+        color: #fff;
+        padding: 18px 35px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-size: 1.2em;
+        font-weight: 600;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+        border: none;
+        cursor: pointer;
+        min-width: 180px;
+      }
+      
+      .cta-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s;
+      }
+      
+      .cta-button:hover::before {
+        left: 100%;
+      }
+      
+      .cta-button:hover {
+        transform: translateY(-7px) scale(1.05);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+        background: linear-gradient(45deg, #ff8eb8, #ff6b9d);
+      }
+      
+      .cta-button.secondary {
+        background: linear-gradient(45deg, #a3d8f4, #7bc8e8);
+      }
+      
+      .cta-button.secondary:hover {
+        background: linear-gradient(45deg, #7bc8e8, #5bb8d8);
+      }
+      
+      .cta-button:disabled {
+        background: linear-gradient(45deg, #ccc, #bbb);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .cta-button:disabled::before {
+        display: none;
+      }
+
+      /* Loading State */
+      .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #fff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 10px;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .loading-spinner.hidden {
+        display: none;
+      }
+
+      /* Success/Error Messages */
+      .message {
+        padding: 18px 25px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        font-size: 1em;
+        font-weight: 500;
+        text-align: center;
+        animation: slideInFromTop 0.5s ease-out;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      @keyframes slideInFromTop {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .message::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.6s ease;
+      }
+      
+      .message:hover::before {
+        left: 100%;
+      }
+      
+      .message.success {
+        background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.08));
+        color: #2e7d32;
+        border: 2px solid rgba(76, 175, 80, 0.3);
+        box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
+      }
+      
+      .message.error {
+        background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(244, 67, 54, 0.08));
+        color: #c62828;
+        border: 2px solid rgba(244, 67, 54, 0.3);
+        box-shadow: 0 5px 15px rgba(244, 67, 54, 0.2);
+      }
+      
+      .message.info {
+        background: linear-gradient(135deg, rgba(33, 150, 243, 0.15), rgba(33, 150, 243, 0.08));
+        color: #1565c0;
+        border: 2px solid rgba(33, 150, 243, 0.3);
+        box-shadow: 0 5px 15px rgba(33, 150, 243, 0.2);
+      }
+
+      /* Auto-paste notification */
+      .auto-paste-notification {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, rgba(76, 175, 80, 0.95), rgba(76, 175, 80, 0.9));
+        color: white;
+        padding: 25px 35px;
+        border-radius: 20px;
+        font-size: 1.2em;
+        font-weight: 600;
+        z-index: 10000;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        animation: popIn 0.5s ease-out;
+        display: none;
+        backdrop-filter: blur(10px);
+      }
+      
+      .auto-paste-notification.show {
+        display: block;
+      }
+      
+      @keyframes popIn {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.5) rotate(-10deg);
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.1) rotate(5deg);
+        }
+        100% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        }
+      }
+
+      /* Parallax Effect for Floating Elements */
+      .floating-elements.parallax .floating-shape {
+        animation-duration: 15s;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .floating-elements {
+          display: none;
+        }
+        
+        .dashboard-header {
+          padding: 15px 20px;
+          flex-direction: column;
+          gap: 15px;
+        }
+        
+        .nav-links {
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+        }
+        
+        .nav-links li {
+          margin-left: 0;
+        }
+        
+        .otp-main {
+          padding-top: 120px;
+        }
+        
+        .otp-container {
+          padding: 40px 25px;
+          margin: 10px;
+        }
+        
+        .otp-container h1 {
+          font-size: 2em;
+        }
+        
+        .otp-inputs {
+          gap: 10px;
+        }
+        
+        .otp-digit {
+          width: 55px;
+          height: 55px;
+          font-size: 1.4em;
+        }
+        
+        .action-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .cta-button {
+          width: 100%;
+          max-width: 250px;
+          font-size: 1.1em;
+          padding: 15px 30px;
+        }
+        
+        .otp-sent-message {
+          padding: 20px;
+          font-size: 1em;
+        }
+        
+        .paste-instruction {
+          padding: 15px 20px;
+          font-size: 0.9em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="custom-cursor"></div>
+    
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+      <div class="floating-shape"></div>
+      <div class="floating-shape"></div>
+      <div class="floating-shape"></div>
+      <div class="floating-shape"></div>
+      <div class="floating-shape"></div>
+      <div class="floating-shape"></div>
+      <div class="floating-shape"></div>
+      <div class="floating-shape"></div>
+    </div>
+    
+    <header class="dashboard-header">
+      <nav>
+        <div class="logo">
+          <a href="index.html">ArguMate</a>
+        </div>
+        <ul class="nav-links">
+          <li><a href="learn.html">Learn</a></li>
+          <li><a href="topics.html">Practice</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="otp-main">
+      <div class="otp-container">
+        <h1>Email Verification</h1>
+        <p class="otp-subtitle">Enter the verification code sent to your email</p>
+        
+        <!-- Message Container -->
+        <div id="message-container"></div>
+        
+        <!-- Error State -->
+        <div id="error-state" class="error-state">
+          <h3>Email Not Found</h3>
+          <p>No email address found in session. Please go back and enter your email first.</p>
+          <div class="action-buttons">
+            <button onclick="window.history.back()" class="cta-button secondary">
+              Go Back
+            </button>
+          </div>
+        </div>
+
+        <!-- OTP Section -->
+        <div id="otp-section" class="otp-section">
+          <div class="otp-sent-message">
+            We've sent a 6-digit verification code to:<br>
+            <span class="email-highlight" id="sent-email"></span>
+          </div>
+          
+          <div class="paste-instruction">
+            Copy the code from your email and it will be automatically pasted here!
+          </div>
+          
+          <div class="otp-inputs">
+            <input type="text" class="otp-digit" maxlength="1" id="otp-1" />
+            <input type="text" class="otp-digit" maxlength="1" id="otp-2" />
+            <input type="text" class="otp-digit" maxlength="1" id="otp-3" />
+            <input type="text" class="otp-digit" maxlength="1" id="otp-4" />
+            <input type="text" class="otp-digit" maxlength="1" id="otp-5" />
+            <input type="text" class="otp-digit" maxlength="1" id="otp-6" />
+          </div>
+          
+          <div class="timer-section">
+            Code expires in: <span class="timer" id="timer">05:00</span>
+          </div>
+          
+          <div class="resend-section">
+            <button id="resend-btn" class="resend-btn" disabled>
+              Resend Code
+            </button>
+          </div>
+          
+          <div class="action-buttons">
+            <button id="verify-otp-btn" class="cta-button" disabled>
+              <span class="loading-spinner hidden" id="verify-loading"></span>
+              <span id="verify-btn-text">Verify Code</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Auto-paste notification -->
+    <div id="auto-paste-notification" class="auto-paste-notification">
+      ✅ Code automatically pasted!
+    </div>
+
+    <script>
+      // Custom Cursor JavaScript
+      const customCursor = document.querySelector(".custom-cursor");
+      document.addEventListener("mousemove", (e) => {
+        customCursor.style.left = e.clientX + "px";
+        customCursor.style.top = e.clientY + "px";
+      });
+      document.addEventListener("mousedown", () =>
+        customCursor.classList.add("active")
+      );
+      document.addEventListener("mouseup", () =>
+        customCursor.classList.remove("active")
+      );
+
+      //Global Variable
+      let backendOTP = ''
+
+      // Parallax Effect for Floating Elements
+      function updateParallax() {
+        const scrolled = window.pageYOffset;
+        const parallaxElements = document.querySelectorAll('.floating-shape');
+        
+        parallaxElements.forEach((element, index) => {
+          const speed = 0.3 + (index * 0.1);
+          const yPos = -(scrolled * speed);
+          const rotation = scrolled * 0.05 * (index + 1);
+          element.style.transform = `translateY(${yPos}px) rotate(${rotation}deg)`;
+        });
+      }
+
+      // Add scroll listener for parallax
+      window.addEventListener('scroll', updateParallax);
+
+      // OTP Verification Logic
+      document.addEventListener("DOMContentLoaded", () => {
+        const errorState = document.getElementById('error-state');
+        const otpSection = document.getElementById('otp-section');
+        const messageContainer = document.getElementById('message-container');
+        const sentEmailSpan = document.getElementById('sent-email');
+        const otpInputs = document.querySelectorAll('.otp-digit');
+        const verifyOtpBtn = document.getElementById('verify-otp-btn');
+        const verifyLoading = document.getElementById('verify-loading');
+        const verifyBtnText = document.getElementById('verify-btn-text');
+        const resendBtn = document.getElementById('resend-btn');
+        const timerElement = document.getElementById('timer');
+        const autoPasteNotification = document.getElementById('auto-paste-notification');
+        
+        let timerInterval;
+        let timeLeft = 300; // 5 minutes in seconds
+        let currentEmail = '';
+
+        // Get email from localStorage
+        function getEmailFromStorage() {
+          try {
+            const userData = localStorage.getItem('userData');
+            if (userData) {
+              const parsed = JSON.parse(userData);
+              if (parsed.email) {
+                return parsed.email;
+              }
+            }
+            
+            return null;
+          } catch (error) {
+            console.error('Error getting email from localStorage:', error);
+            return null;
+          }
+        }
+
+        // Initialize page
+        function initializePage() {
+          const email = getEmailFromStorage();
+          
+          if (!email) {
+            errorState.classList.add('active');
+            return;
+          }
+          
+          currentEmail = email;
+          sentEmailSpan.textContent = email;
+          otpSection.classList.add('active');
+          
+          // Auto-send OTP when page loads
+          sendOTP(email);
+          
+          // Focus first input with delay for animation
+          setTimeout(() => {
+            otpInputs[0].focus();
+          }, 1000);
+        }
+
+        // Show message function
+        function showMessage(text, type = 'info') {
+          messageContainer.innerHTML = `<div class="message ${type}">${text}</div>`;
+          setTimeout(() => {
+            messageContainer.innerHTML = '';
+          }, 5000);
+        }
+
+        // Show auto-paste notification
+        function showAutoPasteNotification() {
+          autoPasteNotification.classList.add('show');
+          setTimeout(() => {
+            autoPasteNotification.classList.remove('show');
+          }, 2500);
+        }
+
+        // Start timer
+        function startTimer() {
+          timeLeft = 300; // Reset to 5 minutes
+          resendBtn.disabled = true;
+          timerElement.classList.remove('expired');
+          
+          timerInterval = setInterval(() => {
+            timeLeft--;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+              clearInterval(timerInterval);
+              timerElement.textContent = 'Expired';
+              timerElement.classList.add('expired');
+              resendBtn.disabled = false;
+              showMessage('Verification code has expired. Please request a new one.', 'error');
+            }
+          }, 1000);
+        }
+
+        // Send OTP API call
+        async function sendOTP(email) {
+          try {
+            // 🔥 API CALL PLACEHOLDER - SEND OTP EMAIL
+            // Replace this with your actual API endpoint
+            const response = await fetch('http://127.0.0.1:8080/api/v1/send/otp', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email: email
+              })
+            });
+
+            const result = await response.json();
+            backendOTP = result.data.otp;
+            if (response.ok && result.success) {
+              // Success - start timer
+              startTimer();
+              showMessage('Verification code sent successfully!', 'success');
+            } else {
+              throw new Error(result.message || 'Failed to send verification code');
+            }
+
+          } catch (error) {
+            console.error('Send OTP Error:', error);
+            showMessage(error.message || 'Failed to send verification code. Please try again.', 'error');
+          }
+        }
+
+        // Verify OTP API call
+        async function verifyOTP(email, otp) {
+          try {
+            verifyLoading.classList.remove('hidden');
+            verifyBtnText.textContent = 'Verifying...';
+            verifyOtpBtn.disabled = true;
+
+            const isOTPValid = backendOTP === otp;
+
+            if (isOTPValid) {
+              // Success - redirect to login page
+              showMessage('Email verified successfully! Redirecting...', 'success');
+              
+              // Clear the email from localStorage after successful verification
+              localStorage.removeItem('userEmail');
+              localStorage.removeItem('email');
+              localStorage.removeItem('registrationEmail');
+              localStorage.removeItem('verificationEmail');
+              
+              setTimeout(() => {
+                // 🔥 REDIRECT TO LOGIN PAGE
+                window.location.href = 'login.html'; // Replace with your login page URL
+              }, 2000);
+              
+            } else {
+              throw new Error('Invalid verification code');
+            }
+
+          } catch (error) {
+            console.error('Verify OTP Error:', error);
+            showMessage(error.message || 'Invalid verification code. Please try again.', 'error');
+            
+            // Clear OTP inputs on error
+            clearOTPInputs();
+            
+          } finally {
+            verifyLoading.classList.add('hidden');
+            verifyBtnText.textContent = 'Verify Code';
+            verifyOtpBtn.disabled = false;
+          }
+        }
+
+        // Clear OTP inputs
+        function clearOTPInputs() {
+          otpInputs.forEach(input => {
+            input.value = '';
+            input.classList.remove('filled', 'auto-filled');
+          });
+          otpInputs[0].focus();
+          verifyOtpBtn.disabled = true;
+        }
+
+        // Fill OTP inputs with code
+        function fillOTPInputs(code, isAutoPaste = false) {
+          const digits = code.toString().split('');
+          
+          otpInputs.forEach((input, index) => {
+            if (digits[index]) {
+              input.value = digits[index];
+              if (isAutoPaste) {
+                input.classList.add('auto-filled');
+                // Add staggered animation delay
+                setTimeout(() => {
+                  input.classList.add('filled');
+                }, index * 100);
+              } else {
+                input.classList.add('filled');
+              }
+            }
+          });
+          
+          // Enable verify button if all inputs are filled
+          const allFilled = Array.from(otpInputs).every(inp => inp.value.length === 1);
+          if (allFilled) {
+            verifyOtpBtn.disabled = false;
+            if (isAutoPaste) {
+              showAutoPasteNotification();
+            }
+          }
+        }
+
+        // Auto-paste detection
+        function setupAutoPaste() {
+          // Listen for paste events on the document
+          document.addEventListener('paste', (e) => {
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            const otpMatch = pastedText.match(/\b\d{6}\b/); // Match 6-digit number
+            
+            if (otpMatch) {
+              e.preventDefault();
+              const otpCode = otpMatch[0];
+              fillOTPInputs(otpCode, true);
+            }
+          });
+
+          // Also listen for paste on individual inputs
+          otpInputs.forEach(input => {
+            input.addEventListener('paste', (e) => {
+              e.preventDefault();
+              const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+              const otpMatch = pastedText.match(/\b\d{6}\b/);
+              
+              if (otpMatch) {
+                const otpCode = otpMatch[0];
+                fillOTPInputs(otpCode, true);
+              }
+            });
+          });
+        }
+
+        // OTP input handling
+        otpInputs.forEach((input, index) => {
+          input.addEventListener('input', (e) => {
+            const value = e.target.value;
+            
+            if (value && /^\d$/.test(value)) {
+              input.classList.add('filled');
+              input.classList.remove('auto-filled');
+              
+              // Move to next input
+              if (index < otpInputs.length - 1) {
+                otpInputs[index + 1].focus();
+              }
+              
+              // Check if all inputs are filled
+              const allFilled = Array.from(otpInputs).every(inp => inp.value.length === 1);
+              verifyOtpBtn.disabled = !allFilled;
+            } else {
+              input.classList.remove('filled', 'auto-filled');
+              verifyOtpBtn.disabled = true;
+            }
+          });
+          
+          input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !input.value && index > 0) {
+              otpInputs[index - 1].focus();
+              otpInputs[index - 1].classList.remove('filled', 'auto-filled');
+            }
+            
+            if (e.key === 'Enter' && !verifyOtpBtn.disabled) {
+              verifyOtpBtn.click();
+            }
+          });
+          
+          // Only allow digits
+          input.addEventListener('keypress', (e) => {
+            if (!/^\d$/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Enter'].includes(e.key)) {
+              e.preventDefault();
+            }
+          });
+        });
+
+        // Verify OTP button click
+        verifyOtpBtn.addEventListener('click', () => {
+          const otp = Array.from(otpInputs).map(input => input.value).join('');
+          
+          if (otp.length !== 6) {
+            showMessage('Please enter the complete 6-digit code.', 'error');
+            return;
+          }
+          
+          verifyOTP(currentEmail, otp);
+        });
+
+        // Resend button click
+        resendBtn.addEventListener('click', () => {
+          if (currentEmail) {
+            clearOTPInputs();
+            sendOTP(currentEmail);
+          }
+        });
+
+        // Initialize everything
+        initializePage();
+        setupAutoPaste();
+      });
+    </script>
+  </body>
+</html>

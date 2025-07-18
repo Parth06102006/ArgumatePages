@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ArguMate - Home</title>
+    <style>
+      /* Global Styles */
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap");
+
+      :root {
+        --primary-color: #6a5acd;
+        --secondary-color: #8a2be2;
+        --accent-pink: #ffb3d9;
+        --accent-blue: #a3d8f4;
+        --text-dark: #333;
+        --text-light: #666;
+        --bg-white-transparent: rgba(255, 255, 255, 0.6);
+        --bg-white-semi-transparent: rgba(255, 255, 255, 0.5);
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        background: linear-gradient(135deg, #ffd1dc, #c7ceea, #d5f5e3, #fff3cd);
+        background-size: 400% 400%;
+        animation: pastel-gradient-animation 15s ease infinite;
+        color: var(--text-dark);
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        cursor: none;
+      }
+
+      @keyframes pastel-gradient-animation {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Custom Cursor */
+      .custom-cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 10px;
+        height: 10px;
+        background-color: var(--text-dark);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: width 0.2s ease-out, height 0.2s ease-out,
+          background-color 0.2s ease-out, border 0.2s ease-out;
+      }
+
+      .custom-cursor.active {
+        background-color: #555;
+        width: 20px;
+        height: 20px;
+      }
+
+      .custom-cursor.hover-active {
+        width: 30px;
+        height: 30px;
+        background-color: transparent;
+        border: 2px solid var(--text-dark);
+      }
+
+      /* Layout */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Header */
+      header {
+        padding: 15px 0;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo a {
+        font-size: 1.8em;
+        font-weight: 700;
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      .logo a:hover {
+        color: var(--secondary-color);
+      }
+
+      .nav-links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+      }
+
+      .nav-links li {
+        margin-left: 30px;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #555;
+        font-weight: 600;
+        font-size: 1.1em;
+        padding: 8px 15px;
+        border-radius: 10px;
+        transition: background-color 0.3s ease, color 0.3s ease,
+          transform 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        background-color: rgba(186, 130, 255, 0.2);
+        color: var(--primary-color);
+        transform: translateY(-3px);
+      }
+
+      .btn-signup {
+        background-color: var(--accent-blue);
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease, transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .btn-signup:hover {
+        background-color: #89cff0;
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Hero Section */
+      .hero-section {
+        min-height: 100vh;
+        padding: 120px 20px 50px;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .hero-content {
+        max-width: 600px;
+        margin: 20px;
+        animation: slideInUp 1s ease-out 0.5s forwards;
+        opacity: 0;
+      }
+
+      .hero-content p {
+        font-size: 1.3em;
+        color: var(--text-light);
+        margin-bottom: 40px;
+      }
+
+      .cta-button {
+        display: inline-block;
+        color: #fff;
+        padding: 15px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-size: 1.2em;
+        font-weight: 600;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        transition: background-color 0.3s ease, transform 0.3s ease,
+          box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        transform: scale(0);
+        animation: ripple-effect 0.6s ease-out;
+        pointer-events: none;
+      }
+
+      @keyframes ripple-effect {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+
+      .hero-graphic {
+        margin: 20px;
+        max-width: 400px;
+        animation: fadeIn 1s ease-out 1s forwards;
+        opacity: 0;
+      }
+
+      .hero-graphic svg {
+        width: 100%;
+        height: auto;
+        animation: float 6s ease-in-out infinite;
+      }
+
+      /* Section Styling */
+      .content-section {
+        padding: 60px 0;
+        text-align: center;
+      }
+
+      .section-title {
+        font-size: 2.8em;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+      }
+
+      .section-subtitle {
+        font-size: 1.2em;
+        color: var(--text-light);
+        max-width: 700px;
+        margin: 0 auto 50px auto;
+      }
+
+      /* Debate Formats Section */
+      .formats-container {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+
+      .format-card {
+        background: var(--bg-white-transparent);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        width: 100%;
+        max-width: 450px;
+        text-align: left;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .format-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+      }
+
+      .format-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .format-icon {
+        width: 50px;
+        height: 50px;
+        margin-right: 20px;
+      }
+
+      .format-card h3 {
+        font-size: 2em;
+        margin: 0;
+        color: var(--secondary-color);
+      }
+
+      .format-card p {
+        color: var(--text-light);
+        line-height: 1.6;
+      }
+
+      .rules-toggle {
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: none;
+        font-weight: 600;
+        margin-top: 20px;
+        transition: background-color 0.3s, color 0.3s;
+      }
+      .rules-toggle:hover {
+        color: #fff;
+      }
+
+      .rules-details {
+        display: none;
+        margin-top: 20px;
+        text-align: left;
+        border-top: 1px solid #eee;
+        padding-top: 20px;
+      }
+      .rules-details ul {
+        list-style: none;
+        padding: 0;
+      }
+      .rules-details li {
+        margin-bottom: 10px;
+        color: var(--text-dark);
+      }
+      .rules-details li strong {
+        color: var(--primary-color);
+      }
+
+      /* Why Choose Us / Features Section */
+      .features-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        padding: 20px;
+        margin: 50px auto;
+        max-width: 1100px;
+      }
+
+      .feature-card {
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        opacity: 0; /* Initially hidden for animation */
+        animation: slideInUp 0.3s ease-out forwards;
+      }
+
+      /* Staggered animation delays */
+      .feature-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .feature-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .feature-card:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .feature-card:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      .feature-card:nth-child(5) {
+        animation-delay: 0.5s;
+      }
+      .feature-card:nth-child(6) {
+        animation-delay: 0.6s;
+      }
+
+      .feature-card:hover {
+        transform:translateY(-30px);
+        background-color:var(--primary-color) ;
+        color:red;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-card h3 {
+        font-size: 1.5em;
+        font-weight:700;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+      }
+
+      .feature-card p {
+        color: var(--text-light);
+        font-size: 1em;
+        line-height: 1.6;
+      }
+
+      .feature-card:hover h3,
+        .feature-card:hover p {
+        color: white ;
+}
+
+
+      /* Footer */
+      footer {
+        background-color: #4c467a;
+        color: #fff;
+        padding: 40px 0;
+        text-align: center;
+      }
+      .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      .footer-container p {
+        margin: 0;
+        color: #ddd;
+      }
+
+      /* Animations */
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes slideInUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 992px) {
+        .hero-section {
+          flex-direction: column;
+          padding-top: 150px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        header .container {
+          flex-direction: column;
+          gap: 15px;
+        }
+        .nav-links {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 5px;
+        }
+        .nav-links li {
+          margin: 5px;
+        }
+        .hero-content h1 {
+          font-size: 2.5em;
+        }
+        .hero-content p {
+          font-size: 1.1em;
+        }
+        .section-title {
+          font-size: 2.2em;
+        }
+        .formats-container {
+          flex-direction: column;
+          align-items: center;
+        }
+        .format-card {
+          max-width: 90%;
+        }
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body>
+    <div class="custom-cursor"></div>
+
+    <header class="backdrop-blur-md bg-white/30">
+      <nav class="container">
+        <div class="logo flex gap-3">
+            <img src="./images/logo.jpg" alt="Logo" class="h-fit w-12 rounded-xl">
+          <a href="index.html">ArguMate</a>
+        </div>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#formats">Formats</a></li>
+          <li><a href="#why-us">Why Us</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="signup.html" class="btn-signup">Sign Up</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero-section container">
+        <div class="bg-linear-65 from-[#a3d8f4]/20 to-pink-200/30 py-[20px] px-[50px] rounded-3xl">
+            <div class="flex flex-col">
+                <div class="md:flex items-center">
+                    <div class="items-start flex flex-col gap-4">
+                    <h1 class="text-8xl font-bold text-slate-700 text-shadow-md text-shadow-blue-600">Construct,</h1>
+                    <h1 class="text-8xl font-bold text-slate-700 text-shadow-md text-shadow-violet-600">Compete,</h1>
+                    <h1 class="text-8xl font-bold text-slate-700 text-shadow-md text-shadow-blue-600">Conquer</h1>
+                </div>
+                <div class="self-center">
+                    <img src="./images/asset.png" alt="asset" class="md:w-fit lg:w-150 ">
+                </div>
+                </div>
+                <p class="max-w-120 text-3xl text-blue-900/80 ">
+                Your ultimate training ground for British and Asian Parliamentary
+                debating. Sharpen your arguments and perfect your delivery on an
+                intuitive, engaging platform.
+                </p>
+            </div>
+          <a href="topics.html" class="cta-button bg-pink-400/80 hover:bg-pink-400 mt-5 border border-white border-2px">Start Your Journey</a>
+        </div>
+        <div class="hero-graphic">
+        </div>
+      </section>
+
+      <section id="formats" class="content-section">
+        <div class="container">
+          <h2 class="text-4xl font-semibold mb-5 text-violet-600">Explore Debating Formats</h2>
+          <p class="section-subtitle">
+            Every debate has its rules of engagement. We provide in-depth guides
+            and practice arenas for the most popular parliamentary styles.
+          </p>
+          <div class="formats-container">
+            <div class="format-card">
+              <div class="format-header">
+                <div class="format-icon">
+                  <img src="./images/british.png" alt="British">
+                </div>
+                <h3>British Parliamentary</h3>
+              </div>
+              <p>
+                A dynamic, four-team format where two teams represent the
+                Government and two represent the Opposition. It emphasizes quick
+                thinking and strategic role fulfillment.
+              </p>
+              <button class="rules-toggle border border-[2px] border-blue-500 text-blue-500 hover:bg-blue-600" data-target="bp-rules">
+                Key Rules at a Glance
+              </button>
+              <div id="bp-rules" class="rules-details">
+                <ul>
+                  <li><strong>Teams:</strong> 4 teams of 2 speakers.</li>
+                  <li><strong>Speech Length:</strong> 7 minutes.</li>
+                  <li>
+                    <strong>Structure:</strong> Opening and Closing halves for
+                    each side.
+                  </li>
+                  <li>
+                    <strong>Key Feature:</strong> Points of Information (POIs)
+                    are crucial for engagement.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="format-card">
+              <div class="format-header">
+                <div class="format-icon">
+                  <img src="./images/asian.png" alt="British">
+                </div>
+                <h3>Asian Parliamentary</h3>
+              </div>
+              <p>
+                A classic two-team format that pits a Government against an
+                Opposition. This style emphasizes direct clash and deep,
+                principled argumentation.
+              </p>
+              <button class="rules-toggle border border-[2px] border-blue-500 text-blue-500 hover:bg-blue-600" data-target="ap-rules">
+                Key Rules at a Glance
+              </button>
+              <div id="ap-rules" class="rules-details">
+                <ul>
+                  <li><strong>Teams:</strong> 2 teams of 3 speakers.</li>
+                  <li><strong>Speech Length:</strong> 7 minutes.</li>
+                  <li>
+                    <strong>Structure:</strong> 3 constructive speeches per
+                    side, plus a Reply Speech.
+                  </li>
+                  <li>
+                    <strong>Key Feature:</strong> Reply speeches (4 mins)
+                    summarize the debate from a biased perspective.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="why-us" class="content-section">
+        <div class="container">
+          <h2 class="text-6xl font-semibold mb-5 text-violet-600">Why Choose ArguMate?</h2>
+          <p class="section-subtitle">
+            We provide a comprehensive toolset designed to take you from a
+            novice speaker to a confident competitor, one argument at a time.
+          </p>
+          <div class="features-section">
+            <div class="feature-card">
+              <h3>📚 Guided Learning</h3>
+              <p>
+                Dive deep into the structures, roles, and strategies of BP and
+                AP debates with our clear, step-by-step modules.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h3>🗣️ Practice Drills</h3>
+              <p>
+                Engage in simulated debates, receive instant feedback, and hone
+                your argumentation and public speaking.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h3>📈 Track Your Progress</h3>
+              <p>
+                Monitor your performance, identify strengths, and pinpoint areas
+                for improvement with personalized insights.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h3>🤖 AI-Powered Feedback</h3>
+              <p>
+                Get real-time analysis of your speech structure, clarity, filler
+                words, and persuasive language.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h3>🌐 Vast Motion Library</h3>
+              <p>
+                Practice with hundreds of curated debate motions across various
+                topics, from politics to pop culture.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h3>🏆 Community & Tournaments</h3>
+              <p>
+                Connect with fellow debaters, join sparring sessions, and
+                compete in exclusive online tournaments.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div class="footer-container">
+        <p>
+          &copy; 2025 ArguMate. All rights reserved. Time to win some arguments.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- Custom Cursor Logic ---
+        const customCursor = document.querySelector(".custom-cursor");
+        if (customCursor) {
+          document.addEventListener("mousemove", (e) => {
+            customCursor.style.left = e.clientX + "px";
+            customCursor.style.top = e.clientY + "px";
+          });
+
+          document.addEventListener("mousedown", () =>
+            customCursor.classList.add("active")
+          );
+          document.addEventListener("mouseup", () =>
+            customCursor.classList.remove("active")
+          );
+
+          const interactiveElements = document.querySelectorAll(
+            "a, button, .rules-toggle"
+          );
+          interactiveElements.forEach((el) => {
+            el.addEventListener("mouseover", () =>
+              customCursor.classList.add("hover-active")
+            );
+            el.addEventListener("mouseout", () =>
+              customCursor.classList.remove("hover-active")
+            );
+          });
+        }
+
+        // --- Ripple Effect for CTA Button ---
+        const ctaButton = document.querySelector(".cta-button");
+        if (ctaButton) {
+          ctaButton.addEventListener("click", function (e) {
+            const ripple = document.createElement("span");
+            ripple.classList.add("ripple");
+            this.appendChild(ripple);
+
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+
+            ripple.addEventListener("animationend", () => ripple.remove());
+          });
+        }
+
+        // --- Rules Toggle Logic ---
+        const ruleToggles = document.querySelectorAll(".rules-toggle");
+        ruleToggles.forEach((toggle) => {
+          toggle.addEventListener("click", () => {
+            const targetId = toggle.getAttribute("data-target");
+            const targetPanel = document.getElementById(targetId);
+
+            if (targetPanel) {
+              if (targetPanel.style.display === "block") {
+                targetPanel.style.display = "none";
+                toggle.textContent = "Key Rules at a Glance";
+              } else {
+                targetPanel.style.display = "block";
+                toggle.textContent = "Hide Rules";
+              }
+            }
+          });
+        });
+      });
+      document.addEventListener("DOMContentLoaded", () => {
+        const username = localStorage.getItem("username");
+        const navLinks = document.getElementById("nav-links");
+
+        if (username && navLinks) {
+          navLinks.innerHTML = `
+        <li><a href="#formats">Formats</a></li>
+        <li><a href="#why-us">Why Us</a></li>
+        <li style="font-weight: bold; color: #6A5ACD;">👋 ${username}</li>
+        <li><a href="#" id="logout-link">Logout</a></li>
+      `;
+
+          document
+            .getElementById("logout-link")
+            .addEventListener("click", () => {
+              localStorage.removeItem("username");
+              location.reload();
+            });
+        }
+      });
+    </script>
+  </body>
+</html>
