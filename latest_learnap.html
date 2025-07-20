@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Asian Parliamentary - DebateSphere</title>
+    <style>
+        /* Global Styles (repeated for self-containment) */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #FFD1DC, #C7CEEA, #D5F5E3, #FFF3CD); /* Pastel gradient colors */
+            background-size: 400% 400%;
+            animation: pastel-gradient-animation 15s ease infinite;
+            color: #333;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            cursor: none; /* Hide default cursor */
+        }
+
+        @keyframes pastel-gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Custom Cursor Styles (repeated) */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 10px;
+            background-color: #000;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease-out, height 0.2s ease-out, background-color 0.2s ease-out;
+        }
+
+        .custom-cursor.active {
+            background-color: #555;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Header (consistent with dashboard) */
+        .dashboard-header {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 15px 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(8px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 50;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        .dashboard-header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header .logo a {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #6A5ACD;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .dashboard-header .logo a:hover {
+            color: #8A2BE2;
+        }
+
+         .dashboard-header .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            font-size: 1.1em;
+            padding: 8px 15px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(186, 130, 255, 0.2);
+            color: #6A5ACD;
+            transform: translateY(-3px);
+        }
+
+        /* Learn Page Specific Styles */
+        .learn-main {
+            padding-top: 100px; /* Space for fixed header */
+            max-width: 1000px;
+            margin: 0 auto;
+            padding-bottom: 50px;
+        }
+
+        .learn-content {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin: 20px;
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .learn-content h1 {
+            font-size: 2.8em;
+            color: #5C4B51;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .learn-content h1::after {
+            content: '';
+            width: 80px;
+            height: 5px;
+            background-color: #A3D8F4; /* Pastel blue underline */
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .format-intro {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .roles-section h2 {
+            font-size: 2.2em;
+            color: #6A5ACD;
+            margin-top: 40px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .role-card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .role-card {
+            background-color: #fff;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            flex: 1;
+            min-width: 300px;
+            max-width: 450px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .role-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .role-card h3 {
+            font-size: 1.8em;
+            color: #FFB3D9; /* Soft pink for main headings */
+            margin-bottom: 15px;
+            border-bottom: 2px solid #FFF3CD;
+            padding-bottom: 5px;
+        }
+
+        .role-card h4 {
+            font-size: 1.3em;
+            color: #5C4B51;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .role-card ul {
+            list-style: none; /* Remove default bullets */
+            padding: 0;
+            margin: 0;
+        }
+
+        .role-card ul li {
+            background-color: rgba(255, 200, 220, 0.1); /* Very light highlight for list items */
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            color: #444;
+            line-height: 1.5;
+            transition: background-color 0.2s ease;
+        }
+
+        .role-card ul li:hover {
+            background-color: rgba(255, 200, 220, 0.2);
+        }
+
+        .role-card ul li strong {
+            color: #6A5ACD; /* Highlight key terms */
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .nav-links li {
+                margin-left: 0;
+            }
+            .learn-main {
+                padding-top: 120px;
+            }
+            .learn-content {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            .learn-content h1 {
+                font-size: 2em;
+            }
+            .roles-section h2 {
+                font-size: 1.8em;
+            }
+            .role-card {
+                min-width: unset;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-cursor"></div>
+
+    <header class="dashboard-header">
+        <nav>
+            <div class="logo">
+                <a href="index.html">
+                    <img
+                    src="/images/logo.jpg"
+                    alt="ArguMate Logo"
+                    onerror="this.onerror=null; this.src='https://placehold.co/40x40/C7CEEA/6A5ACD?text=Logo';"
+                    />
+                    ArguMate
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="learn.html" class="active">Learn</a></li>
+                <li><a href="topics.html">Practice</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="learn-main">
+        <div class="learn-content">
+            <h1>Asian Parliamentary Debating Format</h1>
+            <section class="format-intro">
+                <p>Asian Parliamentary (AP) is a widely practiced debate format, particularly in Asian countries and among high school debaters globally. It features two teams of three speakers each: the Government (Proposition) and the Opposition.</p>
+                <p>The format emphasizes clear argumentation, strong rebuttal, and the ability of speakers to build upon their teammates' cases while refuting the opposing side. It typically includes Points of Information (POIs) and a Reply Speech at the end.</p>
+            </section>
+
+            <section class="roles-section">
+                <h2>Speaker Roles:</h2>
+                <div class="role-card-container">
+                    <div class="role-card">
+                        <h3>Government Side (Proposition)</h3>
+                        <h4>1. Prime Minister (PM)</h4>
+                        <ul>
+                            <li>Defines the motion, outlines the Government's case, and presents the first set of arguments.</li>
+                            <li>Sets the tone and framework for the Government's entire side.</li>
+                        </ul>
+                    </div>
+
+                    <div class="role-card">
+                        <h3>Opposition Side</h3>
+                        <h4>1. Leader of Opposition (LO)</h4>
+                        <ul>
+                            <li>Rebuts the Prime Minister's arguments and presents the Opposition's constructive case.</li>
+                            <li>Can challenge the definition if it is unfair or irrelevant to the spirit of the motion.</li>
+                        </ul>
+                    </div>
+
+                    <div class="role-card">
+                        <h3>Government Side (Proposition)</h3>
+                        <h4>2. Deputy Prime Minister (DPM)</h4>
+                        <ul>
+                            <li>Rebuts the Leader of Opposition's arguments and further extends the Government's case with new arguments.</li>
+                            <li>Reinforces the team's stance and addresses major attacks.</li>
+                        </ul>
+                    </div>
+
+                    <div class="role-card">
+                        <h3>Opposition Side</h3>
+                        <h4>2. Deputy Leader of Opposition (DLO)</h4>
+                        <ul>
+                            <li>Rebuts the Deputy Prime Minister and consolidates the Opposition's case with further arguments.</li>
+                            <li>Provides a strong counter-narrative and highlights weaknesses in the Government's case.</li>
+                        </ul>
+                    </div>
+
+                    <div class="role-card">
+                        <h3>Government Side (Proposition)</h3>
+                        <h4>3. Government Whip (GW)</h4>
+                        <ul>
+                            <li>Summarizes the entire debate from the Government's perspective, highlighting their key arguments.</li>
+                            <li>Provides extensive rebuttal to the Opposition's case, but introduces NO NEW substantial arguments.</li>
+                        </ul>
+                    </div>
+
+                    <div class="role-card">
+                        <h3>Opposition Side</h3>
+                        <h4>3. Opposition Whip (OW)</h4>
+                        <ul>
+                            <li>Summarizes the entire debate from the Opposition's perspective, emphasizing their key arguments.</li>
+                            <li>Provides final, comprehensive rebuttal to the Government's case, but introduces NO NEW substantial arguments.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="roles-section">
+                <h2>Reply Speeches:</h2>
+                <p>Following the main speeches, each side delivers a shorter reply speech (usually 3-5 minutes). These are typically given by the Prime Minister or Deputy Prime Minister for Government, and Leader of Opposition or Deputy Leader of Opposition for Opposition.</p>
+                <p>Reply speeches should provide a highly analytical summary of the debate, explaining why their side has won and highlighting the most important clashes, without introducing any new arguments.</p>
+
+                <h2>Points of Information (POIs):</h2>
+                <p>Similar to BP, POIs are short interventions offered by the opposing side during a speaker's constructive speech (typically between the 1st and last minute). Accepting POIs demonstrates confidence and engagement, while effectively denying too many can be strategic.</p>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Custom Cursor JavaScript
+        const customCursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = e.clientX + 'px';
+            customCursor.style.top = e.clientY + 'px';
+        });
+        document.addEventListener('mousedown', () => {
+            customCursor.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            customCursor.classList.remove('active');
+        });
+
+        // Highlight active navigation link
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === 'learn.html') {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
